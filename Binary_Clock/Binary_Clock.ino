@@ -18,17 +18,19 @@ unsigned char a[8][8] =
 };
 
 //starting hour - add manually (decimal)
-unsigned int h1 = 0;
-unsigned int h2 = 8;
+unsigned int h1 = 1;
+unsigned int h2 = 9;
 // starting min - add manually (decimal)
-unsigned int m1 = 5;
-unsigned int m2 = 3;
+unsigned int m1 = 0;
+unsigned int m2 = 6;
 // starting sec - add manually (decimal)
 unsigned int s1 = 0;
 unsigned int s2 = 0;
 
 void setup()
 {
+  Serial.begin(9600);
+  
   for (int i = 0; i < 8; i++)
   {
     pinMode(R[i], OUTPUT);
@@ -38,6 +40,11 @@ void setup()
 
 void loop()
 {
+  // debug
+  unsigned long timeBegin = micros();
+  unsigned long timeEnd = timeBegin;
+
+  // loop
   manipulate_array(h1, h2, m1, m2);
   blink_a_sec(a);
   
@@ -76,6 +83,12 @@ void loop()
     h1++;
     h2 = 0;
   }
+
+  // debug
+  timeEnd = micros();
+
+  // program duration in millis
+  Serial.println((timeEnd - timeBegin)/1000);
 }
 
 bool is_power_of_two(unsigned int x)
@@ -86,9 +99,9 @@ bool is_power_of_two(unsigned int x)
 void blink_a_sec(unsigned char data[8][8])
 {
   // a second
-  int starttime = millis();
-  int endtime = starttime;
-  while ((endtime - starttime) <= 1000)
+  unsigned long starttime = micros();
+  unsigned long endtime = starttime;
+  while ((endtime - starttime) <= 998000) // 1 000 000 - (delay=1ms=1000μs)
   {
     for (int c = 0; c < 8; c++)
     {
@@ -100,9 +113,14 @@ void blink_a_sec(unsigned char data[8][8])
       delay(1);
       Clear();
     }
-    endtime = millis();
+    endtime = micros();
   }
   // a second passed
+
+  // debug
+  // function duration in micros
+  Serial.print("Func: ");
+  Serial.println(endtime - starttime);
 }
 
 void Clear()
