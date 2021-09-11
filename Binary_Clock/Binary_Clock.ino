@@ -21,7 +21,7 @@ unsigned char a[8][8] =
 unsigned int h1 = 0;
 unsigned int h2 = 8;
 // starting min - add manually (decimal)
-unsigned int m1 = 0;
+unsigned int m1 = 5;
 unsigned int m2 = 3;
 // starting sec - add manually (decimal)
 unsigned int s1 = 0;
@@ -44,8 +44,17 @@ void loop()
   s2++;
   if (s2 > 9)
   {
-    s1++;
-    s2 = 0;
+    if (h1 == 2 and h2 == 3 and m1 == 5 and m2 == 9 and s1 == 5)
+    {
+      h1 = 0; h2 = 0;
+      m1 = 0; m2 = 0;
+      s1 = 0; s2 = 0;
+    }
+    else
+    {
+      s1++;
+      s2 = 0;
+    }
   }
   if (s1 > 5)
   {
@@ -326,7 +335,5 @@ void manipulate_array(unsigned int h1, unsigned int h2, unsigned int m1, unsigne
         a[0][0] = 1; 
         break;
     }
-  }
-
-  
+  }  
 }
