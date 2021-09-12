@@ -24,8 +24,9 @@ Components:
 * Mini Board
 * Jumper Wire x 16
 * Matrix Led 8x8
-* Battery 9V Cable
 * USB Cable
+* Battery 9V Cable  (or even better a powerbank 10000mAh  - turns out the clock consumes a lot of battery)
+
 
 -----------------------------------------------------------
 
