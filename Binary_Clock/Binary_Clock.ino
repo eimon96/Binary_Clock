@@ -2,8 +2,14 @@
 
 #include <math.h>
 
+// Rows and Columns
 const int R[] = {2, 7, A5, 5, 13, A4, 12, A2};
 const int C[] = {6, 11, 10, 3, A3, 4, 8, 9};
+
+// Button
+// Yellow +1 min (m2++) 
+const int yellowButton = 1;
+int yellowPressed = 0;  
 
 unsigned char a[8][8] =
 {
@@ -19,10 +25,10 @@ unsigned char a[8][8] =
 
 //starting hour - add manually (decimal)
 unsigned int h1 = 1;
-unsigned int h2 = 9;
+unsigned int h2 = 6;
 // starting min - add manually (decimal)
 unsigned int m1 = 0;
-unsigned int m2 = 6;
+unsigned int m2 = 0;    // Add one less - when program begins counts +1 cause of the button
 // starting sec - add manually (decimal)
 unsigned int s1 = 0;
 unsigned int s2 = 0;
@@ -36,6 +42,9 @@ void setup()
     pinMode(R[i], OUTPUT);
     pinMode(C[i], OUTPUT);
   }
+
+  // Using pullup so external resistor not needed
+  pinMode(yellowButton, INPUT_PULLUP);
 }
 
 void loop()
@@ -45,8 +54,16 @@ void loop()
   unsigned long timeEnd = timeBegin;
 
   // loop
+  yellowPressed = digitalRead(yellowButton);
+  if (yellowPressed == 1)
+  {
+    m2++; 
+  }
+  
   manipulate_array(h1, h2, m1, m2);
   blink_a_sec(a);
+
+  yellowPressed = 0;
   
   s2++;
   if (s2 > 9)
@@ -101,10 +118,7 @@ void blink_a_sec(unsigned char data[8][8])
   // a second
   unsigned long starttime = micros();
   unsigned long endtime = starttime;
-  
-  // 1 000 000 - (delay = 1ms = 1000μs) - (rest of the program approx delay = 1000μs)
-  // the last one is not a fixed value and we're not sending a rocket to mars here so let it be
-  while ((endtime - starttime) <= 998000) 
+  while ((endtime - starttime) <= 996000) // 1 000 000 - approx program delay
   {
     for (int c = 0; c < 8; c++)
     {
