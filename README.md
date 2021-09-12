@@ -25,7 +25,7 @@ Components:
 * Jumper Wire x 18
 * Matrix Led 8x8
 * USB Cable
-* Battery 9V Cable  (or even better a powerbank 10000mAh  - turns out the clock consumes a lot of battery)
+* Battery 9V Cable  (or even better a powerbank 10000mAh  - turns out it consumes a lot of battery)
 * Key Switch (Button)
 
 
