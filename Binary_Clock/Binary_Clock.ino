@@ -7,9 +7,9 @@ const int R[] = {2, 7, A5, 5, 13, A4, 12, A2};
 const int C[] = {6, 11, 10, 3, A3, 4, 8, 9};
 
 // Button
-// Yellow +1 min (m2++) 
+// Yellow +1 min (m2++)
 const int yellowButton = 1;
-int yellowPressed = 0;  
+int yellowPressed = 0;
 
 unsigned char a[8][8] =
 {
@@ -25,10 +25,10 @@ unsigned char a[8][8] =
 
 //starting hour - add manually (decimal)
 unsigned int h1 = 1;
-unsigned int h2 = 6;
+unsigned int h2 = 7;
 // starting min - add manually (decimal)
-unsigned int m1 = 0;
-unsigned int m2 = 0;    // Add one less - when program begins counts +1 cause of the button
+unsigned int m1 = 4;
+unsigned int m2 = 8;    // Add one less - when program begins counts +1 cause of the button
 // starting sec - add manually (decimal)
 unsigned int s1 = 0;
 unsigned int s2 = 0;
@@ -36,7 +36,7 @@ unsigned int s2 = 0;
 void setup()
 {
   Serial.begin(9600);
-  
+
   for (int i = 0; i < 8; i++)
   {
     pinMode(R[i], OUTPUT);
@@ -57,14 +57,14 @@ void loop()
   yellowPressed = digitalRead(yellowButton);
   if (yellowPressed == 1)
   {
-    m2++; 
+    m2++;
   }
-  
+
   manipulate_array(h1, h2, m1, m2);
   blink_a_sec(a);
 
   yellowPressed = 0;
-  
+
   s2++;
   if (s2 > 9)
   {
@@ -155,6 +155,87 @@ int log_base_two(unsigned int x)
   return (int((log(x)/log(2))));
 }
 
+void max_value_five(unsigned int t, int c)
+{
+  if (t == 0)
+    for (int r = 0; r < 7; r++)
+      a[r][c] = 0;
+  else if (is_power_of_two(t))
+  {
+    for (int r = 0; r < 7; r++)
+      a[r][c] = 0;
+    a[int(log_base_two(t))][c] = 1;
+  }
+  else
+  {
+    switch(t)
+    {
+      case 3:
+      for (int r = 0; r < 7; r++)
+        a[r][c] = 0;
+      a[1][c] = 1;
+      a[0][c] = 1;
+      break;
+      case 5:
+      for (int r = 0; r < 7; r++)
+        a[r][c] = 0;
+      a[2][c] = 1;
+      a[0][c] = 1;
+      break;
+    }
+  }
+}
+
+void max_value_nine(unsigned int t, int c)
+{
+  if (t == 0)
+    for (int r = 0; r < 7; r++)
+      a[r][c] = 0;
+  else if (is_power_of_two(t))
+  {
+    for (int r = 0; r < 7; r++)
+      a[r][c] = 0;
+    a[int(log_base_two(t))][c] = 1;
+  }
+  else
+  {
+    switch(t)
+    {
+      case 3:
+        for (int r = 0; r < 7; r++)
+          a[r][c] = 0;
+        a[1][c] = 1;
+        a[0][c] = 1;
+        break;
+      case 5:
+        for (int r = 0; r < 7; r++)
+          a[r][c] = 0;
+        a[2][c] = 1;
+        a[0][c] = 1;
+        break;
+      case 6:
+        for (int r = 0; r < 7; r++)
+          a[r][c] = 0;
+        a[2][c] = 1;
+        a[1][c] = 1;
+        break;
+      case 7:
+        for (int r = 0; r < 7; r++)
+          a[r][c] = 0;
+        a[2][c] = 1;
+        a[1][c] = 1;
+        a[0][c] = 1;
+        break;
+      case 9:
+        for (int r = 0; r < 7; r++)
+          a[r][c] = 0;
+        a[3][c] = 1;
+        a[0][c] = 1;
+        break;
+    }
+  }
+}
+
 void manipulate_array(unsigned int h1, unsigned int h2, unsigned int m1, unsigned int m2)
 {
   // hours
@@ -162,7 +243,7 @@ void manipulate_array(unsigned int h1, unsigned int h2, unsigned int m1, unsigne
   if (h1 == 0)
     for (int r = 0; r < 7; r++)
       a[r][7] = 0;
-  else if (is_power_of_two(h1)) 
+  else if (is_power_of_two(h1))
   {
     for (int r = 0; r < 7; r++)
       a[r][7] = 0;
@@ -170,205 +251,19 @@ void manipulate_array(unsigned int h1, unsigned int h2, unsigned int m1, unsigne
   }
 
   // h2
-  if (h2 == 0)
-    for (int r = 0; r < 7; r++)
-      a[r][6] = 0;
-  else if (is_power_of_two(h2)) 
-  {
-    for (int r = 0; r < 7; r++)
-      a[r][6] = 0;
-    a[int(log_base_two(h2))][6] = 1;
-  }
-  else
-  {
-    switch(h2)
-    {
-      case 3:
-        for (int r = 0; r < 7; r++)
-          a[r][6] = 0;
-        a[1][6] = 1;
-        a[0][6] = 1;  
-        break;
-      case 5:
-        for (int r = 0; r < 7; r++)
-          a[r][6] = 0;
-        a[2][6] = 1;
-        a[0][6] = 1;  
-        break;
-      case 6:
-        for (int r = 0; r < 7; r++)
-          a[r][6] = 0;
-        a[2][6] = 1;
-        a[1][6] = 1;  
-        break;
-      case 7:
-        for (int r = 0; r < 7; r++)
-          a[r][6] = 0;
-        a[2][6] = 1;
-        a[1][6] = 1;  
-        a[0][6] = 1; 
-        break;
-      case 9:
-        for (int r = 0; r < 7; r++)
-          a[r][6] = 0;
-        a[3][6] = 1;
-        a[0][6] = 1; 
-        break;
-    }
-  }
+  max_value_nine(h2, 6);
 
   // minutes
   // m1
-  if (m1 == 0)
-    for (int r = 0; r < 7; r++)
-      a[r][4] = 0;
-  else if (is_power_of_two(m1)) 
-  {
-    for (int r = 0; r < 7; r++)
-      a[r][4] = 0;
-    a[int(log_base_two(m1))][4] = 1;
-  }
-  else
-  {
-    switch(m1)
-    {
-      case 3:
-      for (int r = 0; r < 7; r++)
-        a[r][4] = 0;
-      a[1][4] = 1;
-      a[0][4] = 1;  
-      break;
-      case 5:
-      for (int r = 0; r < 7; r++)
-        a[r][4] = 0;
-      a[2][4] = 1;
-      a[0][4] = 1;  
-      break;
-    }
-  }
+  max_value_five(m1, 4);
+
   // m2
-  if (m2 == 0)
-    for (int r = 0; r < 7; r++)
-      a[r][3] = 0;
-  else if (is_power_of_two(m2)) 
-  {
-    for (int r = 0; r < 7; r++)
-      a[r][3] = 0;
-    a[int(log_base_two(m2))][3] = 1;
-  }
-  else
-  {
-    switch(m2)
-    {
-      case 3:
-        for (int r = 0; r < 7; r++)
-          a[r][3] = 0;
-        a[1][3] = 1;
-        a[0][3] = 1;  
-      break;
-      case 5:
-        for (int r = 0; r < 7; r++)
-          a[r][3] = 0;
-        a[2][3] = 1;
-        a[0][3] = 1;  
-        break;
-      case 6:
-        for (int r = 0; r < 7; r++)
-          a[r][3] = 0;
-        a[2][3] = 1;
-        a[1][3] = 1;  
-        break;
-      case 7:
-        for (int r = 0; r < 7; r++)
-          a[r][3] = 0;
-        a[2][3] = 1;
-        a[1][3] = 1;  
-        a[0][3] = 1; 
-        break;
-      case 9:
-        for (int r = 0; r < 7; r++)
-          a[r][3] = 0;
-        a[3][3] = 1;
-        a[0][3] = 1; 
-        break;
-    }
-  }
+  max_value_nine(m2, 3);
 
   // seconds
   // s1
-  if (s1 == 0)
-    for (int r = 0; r < 7; r++)
-      a[r][1] = 0;
-  else if (is_power_of_two(s1)) 
-  {
-    for (int r = 0; r < 7; r++)
-      a[r][1] = 0;
-    a[int(log_base_two(s1))][1] = 1;
-  }
-  else
-  {
-    switch(s1)
-    {
-      case 3:
-      for (int r = 0; r < 7; r++)
-        a[r][1] = 0;
-      a[1][1] = 1;
-      a[0][1] = 1;  
-      break;
-      case 5:
-      for (int r = 0; r < 7; r++)
-        a[r][1] = 0;
-      a[2][1] = 1;
-      a[0][1] = 1;  
-      break;
-    }
-  }
+  max_value_five(s1, 1);
 
   // s2
-  if (s2 == 0)
-    for (int r = 0; r < 7; r++)
-      a[r][0] = 0;
-  else if (is_power_of_two(s2))
-  { 
-    for (int r = 0; r < 7; r++)
-      a[r][0] = 0;
-    a[int(log_base_two(s2))][0] = 1;
-  }
-  else
-  {
-    switch(s2)
-    {
-      case 3:
-        for (int r = 0; r < 7; r++)
-          a[r][0] = 0;
-        a[1][0] = 1;
-        a[0][0] = 1;  
-      break;
-      case 5:
-        for (int r = 0; r < 7; r++)
-          a[r][0] = 0;
-        a[2][0] = 1;
-        a[0][0] = 1;  
-        break;
-      case 6:
-        for (int r = 0; r < 7; r++)
-          a[r][0] = 0;
-        a[2][0] = 1;
-        a[1][0] = 1;  
-        break;
-      case 7:
-        for (int r = 0; r < 7; r++)
-          a[r][0] = 0;
-        a[2][0] = 1;
-        a[1][0] = 1;  
-        a[0][0] = 1; 
-        break;
-      case 9:
-        for (int r = 0; r < 7; r++)
-          a[r][0] = 0;
-        a[3][0] = 1;
-        a[0][0] = 1; 
-        break;
-    }
-  }  
+  max_value_nine(s2, 0);
 }
