@@ -204,9 +204,9 @@ void manipulate_array(unsigned int h1, unsigned int h2, unsigned int m1, unsigne
       case 7:
         for (int r = 0; r < 7; r++)
           a[r][6] = 0;
-        a[3][6] = 1;
-        a[2][6] = 1;  
-        a[1][6] = 1; 
+        a[2][6] = 1;
+        a[1][6] = 1;  
+        a[0][6] = 1; 
         break;
       case 9:
         for (int r = 0; r < 7; r++)
