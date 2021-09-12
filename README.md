@@ -22,10 +22,11 @@ Components:
 * Expansion
 * Solderless Breadboard MB-102
 * Mini Board
-* Jumper Wire x 16
+* Jumper Wire x 18
 * Matrix Led 8x8
 * USB Cable
 * Battery 9V Cable  (or even better a powerbank 10000mAh  - turns out the clock consumes a lot of battery)
+* Key Switch (Button)
 
 
 -----------------------------------------------------------
@@ -37,6 +38,10 @@ Connections:
 ![](https://i.imgur.com/3EurCtA.png)
 
 ![](https://i.imgur.com/PrMRWdn.png)
+
+![](https://i.imgur.com/3nijPDL.jpg)
+
+Connect button to D1 and 5V
 
 -----------------------------------------------------------
 
