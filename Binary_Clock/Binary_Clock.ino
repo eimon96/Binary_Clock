@@ -24,17 +24,18 @@ unsigned char a[8][8] =
 };
 
 //starting hour - add manually (decimal)
-unsigned int h1 = 1;
-unsigned int h2 = 7;
+unsigned int h1 = 0;
+unsigned int h2 = 2;
 // starting min - add manually (decimal)
-unsigned int m1 = 4;
-unsigned int m2 = 8;    // Add one less - when program begins counts +1 cause of the button
+unsigned int m1 = 3;
+unsigned int m2 = 0;    // Add one less - when program begins counts +1 cause of the button
 // starting sec - add manually (decimal)
 unsigned int s1 = 0;
 unsigned int s2 = 0;
 
 void setup()
 {
+  // debug
   Serial.begin(9600);
 
   for (int i = 0; i < 8; i++)
@@ -50,21 +51,30 @@ void setup()
 void loop()
 {
   // debug
-  unsigned long timeBegin = micros();
-  unsigned long timeEnd = timeBegin;
+  //unsigned long timeBegin = micros();
+  //unsigned long timeEnd = timeBegin;
 
   // loop
   yellowPressed = digitalRead(yellowButton);
   if (yellowPressed == 1)
-  {
     m2++;
-  }
 
-  manipulate_array(h1, h2, m1, m2);
-  blink_a_sec(a);
+  manipulate_array();
+  blink_a_sec();
 
   yellowPressed = 0;
 
+  increase_values();
+
+  // debug
+  //timeEnd = micros();
+
+  // program duration in millis
+  //Serial.println((timeEnd - timeBegin)/1000);
+}
+
+void increase_values()
+{
   s2++;
   if (s2 > 9)
   {
@@ -100,12 +110,6 @@ void loop()
     h1++;
     h2 = 0;
   }
-
-  // debug
-  timeEnd = micros();
-
-  // program duration in millis
-  Serial.println((timeEnd - timeBegin)/1000);
 }
 
 bool is_power_of_two(unsigned int x)
@@ -113,7 +117,7 @@ bool is_power_of_two(unsigned int x)
     return (x & (x - 1)) == 0;
 }
 
-void blink_a_sec(unsigned char data[8][8])
+void blink_a_sec()
 {
   // a second
   unsigned long starttime = micros();
@@ -125,7 +129,7 @@ void blink_a_sec(unsigned char data[8][8])
       digitalWrite(C[c], LOW);
       for (int r = 0; r < 8; r++)
       {
-        digitalWrite(R[r], data[r][c]);
+        digitalWrite(R[r], a[r][c]);
       }
       delay(1);
       Clear();
@@ -136,7 +140,7 @@ void blink_a_sec(unsigned char data[8][8])
 
   // debug
   // function duration in micros
-  Serial.print("Func: ");
+  //Serial.print("Func: ");
   Serial.println(endtime - starttime);
 }
 
@@ -155,14 +159,27 @@ int log_base_two(unsigned int x)
   return (int((log(x)/log(2))));
 }
 
-void max_value_five(unsigned int t, int c)
+void max_value_two(unsigned int t, int c)
 {
   if (t == 0)
-    for (int r = 0; r < 7; r++)
+    for (int r = 0; r < 8; r++)
       a[r][c] = 0;
   else if (is_power_of_two(t))
   {
-    for (int r = 0; r < 7; r++)
+    for (int r = 0; r < 8; r++)
+      a[r][c] = 0;
+    a[int(log_base_two(t))][c] = 1;
+  }
+}
+
+void max_value_five(unsigned int t, int c)
+{
+  if (t == 0)
+    for (int r = 0; r < 8; r++)
+      a[r][c] = 0;
+  else if (is_power_of_two(t))
+  {
+    for (int r = 0; r < 8; r++)
       a[r][c] = 0;
     a[int(log_base_two(t))][c] = 1;
   }
@@ -171,17 +188,17 @@ void max_value_five(unsigned int t, int c)
     switch(t)
     {
       case 3:
-      for (int r = 0; r < 7; r++)
-        a[r][c] = 0;
-      a[1][c] = 1;
-      a[0][c] = 1;
-      break;
+        for (int r = 0; r < 8; r++)
+          a[r][c] = 0;
+        a[1][c] = 1;
+        a[0][c] = 1;
+        break;
       case 5:
-      for (int r = 0; r < 7; r++)
-        a[r][c] = 0;
-      a[2][c] = 1;
-      a[0][c] = 1;
-      break;
+        for (int r = 0; r < 8; r++)
+          a[r][c] = 0;
+        a[2][c] = 1;
+        a[0][c] = 1;
+        break;
     }
   }
 }
@@ -189,11 +206,11 @@ void max_value_five(unsigned int t, int c)
 void max_value_nine(unsigned int t, int c)
 {
   if (t == 0)
-    for (int r = 0; r < 7; r++)
+    for (int r = 0; r < 8; r++)
       a[r][c] = 0;
   else if (is_power_of_two(t))
   {
-    for (int r = 0; r < 7; r++)
+    for (int r = 0; r < 8; r++)
       a[r][c] = 0;
     a[int(log_base_two(t))][c] = 1;
   }
@@ -202,32 +219,32 @@ void max_value_nine(unsigned int t, int c)
     switch(t)
     {
       case 3:
-        for (int r = 0; r < 7; r++)
+        for (int r = 0; r < 8; r++)
           a[r][c] = 0;
         a[1][c] = 1;
         a[0][c] = 1;
         break;
       case 5:
-        for (int r = 0; r < 7; r++)
+        for (int r = 0; r < 8; r++)
           a[r][c] = 0;
         a[2][c] = 1;
         a[0][c] = 1;
         break;
       case 6:
-        for (int r = 0; r < 7; r++)
+        for (int r = 0; r < 8; r++)
           a[r][c] = 0;
         a[2][c] = 1;
         a[1][c] = 1;
         break;
       case 7:
-        for (int r = 0; r < 7; r++)
+        for (int r = 0; r < 8; r++)
           a[r][c] = 0;
         a[2][c] = 1;
         a[1][c] = 1;
         a[0][c] = 1;
         break;
       case 9:
-        for (int r = 0; r < 7; r++)
+        for (int r = 0; r < 8; r++)
           a[r][c] = 0;
         a[3][c] = 1;
         a[0][c] = 1;
@@ -236,19 +253,11 @@ void max_value_nine(unsigned int t, int c)
   }
 }
 
-void manipulate_array(unsigned int h1, unsigned int h2, unsigned int m1, unsigned int m2)
+void manipulate_array()
 {
   // hours
   // h1
-  if (h1 == 0)
-    for (int r = 0; r < 7; r++)
-      a[r][7] = 0;
-  else if (is_power_of_two(h1))
-  {
-    for (int r = 0; r < 7; r++)
-      a[r][7] = 0;
-    a[int(log_base_two(h1))][7] = 1;
-  }
+  max_value_two(h1, 7);
 
   // h2
   max_value_nine(h2, 6);
