@@ -101,7 +101,10 @@ void blink_a_sec(unsigned char data[8][8])
   // a second
   unsigned long starttime = micros();
   unsigned long endtime = starttime;
-  while ((endtime - starttime) <= 998000) // 1 000 000 - (delay=1ms=1000μs)
+  
+  // 1 000 000 - (delay = 1ms = 1000μs) - (rest of the program approx delay = 1000μs)
+  // the last one is not a fixed value and we're not sending a rocket to mars here so let it be
+  while ((endtime - starttime) <= 998000) 
   {
     for (int c = 0; c < 8; c++)
     {
